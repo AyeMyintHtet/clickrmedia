@@ -18,6 +18,9 @@ const postRoute = require('./routes/posts');
 app.use('/api/posts', postRoute);
 app.use('/api/user',authRoute);
 
+app.get('/', (req,res)=>{
+    res.send('Welcom To My AMH Project.')
+})
  mongoose.connect(process.env.DB_CONNECTION,{useNewUrlParser:true},()=>{
     console.log('Connected To Database')
 })
