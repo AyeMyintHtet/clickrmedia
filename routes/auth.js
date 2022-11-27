@@ -31,6 +31,7 @@ router.post('/register', async (req,res)=>{
 
     const roleCheck = await UserRole.findOne({roleID : req.body.userrole});
     if(!roleCheck) return res.status(400).json({messagae:"role does not exist"})
+    
     //create new User
     const user = new User({
         name: req.body.name,
@@ -56,10 +57,9 @@ router.post('/login',async (req,res)=>{
     //password correct 
     const validPass = await bcrypt.compare(req.body.password,user.password);
     if(!validPass) return res.status(400).send('Email or Password was wrong');
-
     //create assign token 
     const token = jwt.sign({_id : user._id}, process.env.TOKEN_SEC);
-    res.header('auth-token',token).json({'auth-token':token,'status':'success'});
+    res.header('auth-token',token).json({'auth-token':token,user,'status':'success'});
 
 })
 
