@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('../models/Post');
+const User = require('../models/User');
+const TicketStatus = require('../models/TicketStatus'); 
 const verify = require('./verifyToken');
 
 //Get all the Ticket
@@ -15,16 +17,24 @@ router.get('/',verify, async (req,res)=>{
 
 //Post a Ticket
 router.post('/', async (req,res)=>{
+    //validation
+    const user = await User.findOne({email : req.body.email});
+    if(!user) return res.status(400).json({message: 'UserID does not exist on our Database'});
+
+    const statusID = await TicketStatus.findOne({statusID: req.body.statusID||4});
+    if(!statusID) return res.status(400).json({message : 'Ticket status does not exists'});
+
     const post = new Post({
         title: req.body.title,
-        description: req.body.description 
+        description: req.body.description,
+        email: req.body.email,
+        statusID: req.body.statusID || 4
     });
-
     try {
         const savedTicket = await post.save();
         res.status(200).json(savedTicket);
     } catch (error) {
-        res.status(400).json({message: error})
+        res.status(400).json({message: error.errors.description.message})
     }
 
 })

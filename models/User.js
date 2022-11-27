@@ -18,6 +18,11 @@ const userSchema  = mongoose.Schema({
         required:true,
         max:1024
     },
+    userrole:{
+        type:String,
+        required:true,
+        max:255
+    },
     date:{
         type: Date,
         default: Date.now
