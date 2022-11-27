@@ -39,9 +39,9 @@ router.post('/', verify,async (req,res)=>{
 
 })
 // Get Ticket By ID
-router.get('/:postID',verify,async (req,res)=>{
+router.get('/:userMail',verify,async (req,res)=>{
     try {
-        const specificTicket = await Post.findById(req.params.postID);
+        const specificTicket = await Post.find({email:req.params.userMail});
         res.status(200).json(specificTicket)
     } catch (error) {
         res.status(400).json({message:`This ID (${error.value}) does not exist in our database!`})
