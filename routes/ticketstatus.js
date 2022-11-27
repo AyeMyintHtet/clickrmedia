@@ -22,7 +22,8 @@ router.post('/', async (req,res)=>{
         const savedTicket =await  ticketPost.save()
         res.status(200).json(savedTicket);
     } catch (error) {
-        res.status(400).json({message : error})
+        console.log('error', error)
+        res.status(400).json({message : 'Something went wrong'})
     }
 })
 router.delete('/:ticketID', async (req,res)=>{

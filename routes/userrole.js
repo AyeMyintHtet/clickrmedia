@@ -21,12 +21,12 @@ router.post('/', async(req,res)=>{
         const userRolesaved =await  userRoles.save()
         res.status(200).json(userRolesaved);
     } catch (error) {
-        res.status(400).json({message : error})
+        res.status(400).json({message : 'Something went wrong'})
     }
 })
 router.delete('/:roleID', async (req,res)=>{
     try {
-        await  userRoles.remove({roleID:req.params.roleID})
+        await  userRole.remove({roleID:req.params.roleID})
         res.status(200).json({message:'Role successfully deleted'})
     } catch (error) {
         res.status(400).json({message : error})

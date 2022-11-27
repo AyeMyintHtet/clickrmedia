@@ -16,7 +16,7 @@ router.get('/',verify, async (req,res)=>{
 })
 
 //Post a Ticket
-router.post('/', async (req,res)=>{
+router.post('/', verify,async (req,res)=>{
     //validation
     const user = await User.findOne({email : req.body.email});
     if(!user) return res.status(400).json({message: 'UserID does not exist on our Database'});
@@ -39,7 +39,7 @@ router.post('/', async (req,res)=>{
 
 })
 // Get Ticket By ID
-router.get('/:postID',async (req,res)=>{
+router.get('/:postID',verify,async (req,res)=>{
     try {
         const specificTicket = await Post.findById(req.params.postID);
         res.status(200).json(specificTicket)
@@ -49,7 +49,7 @@ router.get('/:postID',async (req,res)=>{
 })
 
 //Delete Ticket
-router.delete('/:postID',async (req,res)=>{
+router.delete('/:postID',verify,async (req,res)=>{
     try {        
         const specificTicket = await Post.findById(req.params.postID);
         const removeTicket = await Post.remove({_id:req.params.postID});
@@ -59,7 +59,7 @@ router.delete('/:postID',async (req,res)=>{
     }
 })
 // Update Ticket 
-router.patch('/:postID',async (req,res)=>{
+router.patch('/:postID',verify,async (req,res)=>{
     try {        
         await Post.updateOne({_id:req.params.postID},
             {$set : {
