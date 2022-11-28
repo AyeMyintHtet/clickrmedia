@@ -21,7 +21,7 @@ router.post('/register', async (req,res)=>{
     
     // console.log('req.body.userrole', req.body.userrole);
     const {error} =await registerValidation(req.body);
-    if(error) return res.status(400).json(error.details[0].message);
+    if(error) return res.status(400).json({message:error.details[0].message});
     //check user already in database
     const emailExist = await User.findOne({email : req.body.email});
     if(emailExist) return res.status(400).json({message:'Email alredy exist'});
@@ -43,14 +43,13 @@ router.post('/register', async (req,res)=>{
         const savedUser = await user.save();
         res.status(200).send(savedUser);
     } catch (error) {
-        console.log('error', error)
         res.status(400).json({message : error})
     }
 })
 
 router.post('/login',async (req,res)=>{
     const {error} =await loginValidation(req.body);
-    if(error) return res.status(400).json(error.details[0].message);
+    if(error) return res.status(400).json({message:error.details[0].message});
     //check mail
     const user = await User.findOne({email : req.body.email});
     if(!user) return res.status(400).json('Email or Password was wrong');
