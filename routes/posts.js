@@ -21,14 +21,13 @@ router.post('/', verify,async (req,res)=>{
     const user = await User.findOne({email : req.body.email});
     if(!user) return res.status(400).json({message: 'UserID does not exist on our Database'});
 
-    const statusID = await TicketStatus.findOne({statusID: req.body.statusID||4});
-    if(!statusID) return res.status(400).json({message : 'Ticket status does not exists'});
-
+    const status = await TicketStatus.findOne({statusID: req.body.statusID||4});
+    if(!status) return res.status(400).json({message : 'Ticket status does not exists'});
     const post = new Post({
         title: req.body.title,
         description: req.body.description,
         email: req.body.email,
-        statusID: req.body.statusID || 4
+        status: status.statusName
     });
     try {
         const savedTicket = await post.save();
@@ -61,10 +60,13 @@ router.delete('/:postID',verify,async (req,res)=>{
 // Update Ticket 
 router.patch('/:postID',verify,async (req,res)=>{
     try {        
+        const status = await TicketStatus.findOne({statusID: req.body.statusID||4});
+        if(!status) return res.status(400).json({message : 'Ticket status does not exists'});
         await Post.updateOne({_id:req.params.postID},
             {$set : {
                 title:req.body.title,
-                description:req.body.description
+                description:req.body.description,
+                status: status.statusName
             }
         })
         res.status(200).json({message : 'Your ticket has been updated'})
